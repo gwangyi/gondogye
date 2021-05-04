@@ -1,10 +1,10 @@
 #include <stdint.h>
 #include <sys/types.h>
-#include <bcm2835.h>
 #include <sys/time.h>
 #include <stdio.h>
 #include <unistd.h>
 
+#include "bcm2835.h"
 #include "dht.h"
 
 inline uint64_t get_timestamp(const struct timeval * tv) {
@@ -74,15 +74,15 @@ int begin_sense(struct dht_sensor * dht) {
 
   if (dht->loglevel) fputs("Initiate read\n", stderr);
   bcm2835_gpio_write(pin, HIGH);
-  usleep(500000);
+  bcm2835_delay(500);
   bcm2835_gpio_write(pin, LOW);
-  usleep(20000);
+  bcm2835_delay(20);
 
   bcm2835_gpio_fsel(pin, BCM2835_GPIO_FSEL_INPT);
 
   if (dht->loglevel) fputs("Waiting respond\n", stderr);
   while (bcm2835_gpio_lev(pin) == HIGH) {
-    usleep(1);
+    bcm2835_delayMicroseconds(1);
   }
   if (dht->loglevel) fputs("Respond received", stderr);
   gettimeofday(&tv, NULL);
