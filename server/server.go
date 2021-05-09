@@ -7,6 +7,7 @@ import "net/http"
 
 import "github.com/gwangyi/gondogye/dht"
 
+// Server provides http server that serves temperature and humidity.
 type Server struct {
 	Sensor dht.DHT
 }
@@ -30,6 +31,7 @@ func (s *Server) measure(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Measured: %#v", result)
 }
 
+// Start starts http server that serves temperature and humidity.
 func (s *Server) Start(host string, port int) {
 	log.Printf("Listening from %v:%v", host, port)
 	http.HandleFunc("/", s.measure)
